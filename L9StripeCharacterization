@@ -1,0 +1,247 @@
+/**
+ * 
+ * Author:          Gabriel Peters, ugrad (ggp2366@rit.edu)
+ * Latest Version:  6th July 2022
+ * Affiliation:     CIS, Rochester Institute of Technology
+ *
+ */
+
+// -------- READ ME ---------
+/*
+  To use this code: 
+  1. Click "Run" at the top of the page to run the program.
+  2. On the right window make sure the "Console" tab is open to view 
+     important image information 
+  3. Set verbose settings
+    - set "Verbose" to "true" to see the following layers:
+     1. Image selection filtered by date
+     2. Date image selection filtered by cloud cover 
+     3. Cloud cover selection in thermal (for testing)
+     4. Cloud cover selection filtered by location                */
+
+    var Verbose = false;
+
+    /*  - set the following to "true" to see bands 10 and 11 
+          as a map layer */
+
+    var Band_Verbose = false;
+
+/*
+  4. This code grabs images from a 24 hour period 2 days before the current date.
+     If you want to test the code for different dates, just change the 
+     "-1" and "-2" under "Filtering date" to increasing numbers to grab an image from 
+     previous days
+  5. Run the program
+  6. Hover over "Layers" to toggle on and off the different layers for the map
+    - Toggle "True Color" to take away the images with cloud cover
+
+  IMPORTANT: 
+  1. The name of the exported file is the product ID of the image
+  
+  2. If you want to access images from a specific date, scroll 
+  to "specific dates:" under "Filtering by date" and un-comment the line 
+  with the specific dates, insert the dates of interest, and comment out the 
+  lines directly below it.
+  
+  3. The final images will be exported into a google drive folder with the 
+     date of the image as it's name
+     
+  4. If you want to show a specific image, go to line 89 and use the 
+     product ID of the image you want to set it as the "image".
+*/
+
+// -------- Image Collection Filtering --------
+
+// print the number of images in the USGS Landsat 9 Collection 2 Tier 1 
+// TOA Reflectance database
+print('Images found...', imageCollection.size());
+print('--------------------------------------------------');
+
+/// --------- filtering collection by date -----------
+var newDate = new Date(); 
+var today = ee.Date(newDate);
+var two_days_ago = today.advance(-2, 'day'); //change to test the code
+var three_days_ago = today.advance(-3, 'day');  //change as you changed ^
+
+print('Today: ', newDate); 
+print('Two days ago: ', two_days_ago); 
+print('Three days ago: ', three_days_ago);
+
+// change for specific date: 
+//var filtered = imageCollection.filterDate('2022-6-9', '2022-6-25');
+var filtered = imageCollection.filterDate(three_days_ago, two_days_ago);
+print('Filtered by date...', filtered.size());
+
+
+// ----------- filtering collection by cloud cover ------------
+var cloud = filtered.filterMetadata('CLOUD_COVER', 'less_than', 10);
+if (Verbose === true){
+  Map.addLayer(
+    cloud,
+    {min:0, max:0.5, bands:['B4', 'B3', 'B2']},
+    'Cloud Filter'
+  );
+}
+
+print('Filtered by cloud cover...', cloud.size()); 
+
+// ------- isolating an image based on location -------
+var Geometry = cloud.filterBounds(geometry);
+
+//var image = ee.Image( INSERT PRODUCT ID );        // get specific image
+var image = ee.Image(Geometry.first());
+print('Filtered by location...', Geometry.size());
+
+if (Verbose === true){
+  Map.addLayer(
+    Geometry.min(),
+    {min:0, max:0.5, bands:['B4', 'B3', 'B2']},
+   'Inside Specified Geometry'
+  );
+}
+
+// extracting the coefficients for radiance conversion
+var RADIANCE_MULT_BAND_10 = image.get('RADIANCE_MULT_BAND_10');
+print('RADIANCE_MULT_BAND_10:', RADIANCE_MULT_BAND_10);
+
+var RADIANCE_MULT_BAND_11 = image.get('RADIANCE_MULT_BAND_11');
+print('RADIANCE_MULT_BAND_11:', RADIANCE_MULT_BAND_11);
+
+var RADIANCE_ADD_BAND_10 = image.get('RADIANCE_ADD_BAND_10');
+print('RADIANCE_ADD_BAND_10:', RADIANCE_ADD_BAND_10);
+
+var RADIANCE_ADD_BAND_11 = image.get('RADIANCE_ADD_BAND_11');
+print('RADIANCE_ADD_BAND_11:', RADIANCE_ADD_BAND_11);
+
+// selecting band 10 and 11 variables 
+var b10 = image.select('B10');
+var b11 = image.select('B11');
+
+// testing
+var b10_radiance = ee.Image(b10 * RADIANCE_MULT_BAND_10 + RADIANCE_ADD_BAND_10);
+var b11_radiance = ee.Image(b11 * RADIANCE_MULT_BAND_11 + RADIANCE_ADD_BAND_11);
+
+// -------- displaying individual bands -----------
+
+if (Band_Verbose === true){
+ Map.addLayer(                  // adding map layer for band 10
+    image,
+    {min:0, max:500, bands:['B10']},
+    'B10'
+  );
+    Map.addLayer(               // adding map layer for band 11
+    image,
+    {min:0, max:500, bands:['B11']},
+    'B11'
+  );
+  
+} // Band_Verbose
+
+// _______calculating the percent difference between__________
+//             bands 10 and 11 for the image 
+var percentDiff = (image.select('B10').subtract(image.select('B11'))
+  .divide((image.select('B10'))).multiply(100));
+  
+if (Verbose === true){
+  Map.addLayer(
+    filtered.min(),
+    {min:0, max:0.5, bands:['B4', 'B3', 'B2']},
+    'True Color'
+  );
+}
+
+Map.addLayer(percentDiff, {min:-0.625, max:1.25}, 'Isolated Image');
+Map.centerObject(percentDiff, 7);
+print('--------------------------------------------------');
+
+// -------- exporting --------
+var date = (ee.Date(image.get('system:time_start')).format('YYYY-MM-dd')).getInfo();  
+var image_id = (image.getString('LANDSAT_PRODUCT_ID')).getInfo();
+var imageIndexId = (image.getString('system:index')).getInfo();
+print('Name of export: ' + '"' + image_id  +  '"');
+print('Image id: ' + image_id);
+print('Image Index: ' + 'LANDSAT/LC09/C02/T1_TOA/' + imageIndexId);
+
+var finalVis = {min:-0.625, max:1.25};
+var finalImage = percentDiff.visualize(finalVis);
+
+// exporting band 10 brightness temperature
+Export.image.toDrive({    
+  image: b10,
+  folder: 'Landsat9: ' + date, // folder in your google drive
+  description: 'B10_Brightness_Temp',
+  fileNamePrefix: 'B10 Brightness Temp',     // name of file will be the date the image was taken
+  scale: 50,
+  maxPixels: 10000000000000
+  });
+  
+// exporting band 11 brightness temperature
+Export.image.toDrive({    
+  image: b11,
+  folder: 'Landsat9: ' + date, // folder in your google drive
+  description: 'B11_Brightness_Temp',
+  fileNamePrefix: 'B11 Brightness Temp',     // name of file will be the date the image was taken
+  scale: 50,
+  maxPixels: 10000000000000
+  });
+
+// exporting stripe image
+Export.image.toDrive({    // exports to google drive
+  image: finalImage,
+  folder: 'Landsat9: ' + date, // folder in your google drive
+  description: 'Percent_Difference_Image',
+  fileNamePrefix: image_id,     // name of file will be the date the image was taken
+  scale: 50,
+  maxPixels: 10000000000000
+  });
+print('--------------------------------------------------');
+
+// -------- Retreiving Metadata -----------
+print('RETREIVED METADATA (image):');
+
+// Display all metadata.
+print('All metadata:', image);
+
+// Get information about the bands as a list.
+var bandNames = image.bandNames();
+print('Band names:', bandNames);  
+
+// Get projection information from band 10.
+var b10proj = image.select('B10').projection();
+print('Band 10 projection:', b10proj);  
+
+// Get scale (in meters) information from band 10.
+var b10scale = image.select('B10').projection().nominalScale();
+print('Band 10 scale:', b10scale);  
+
+// Get projection information from band 11.
+var b11proj = image.select('B11').projection();
+print('Band 11 projection:', b11proj);  
+
+// Get scale (in meters) information from band 11.
+var b11scale = image.select('B11').projection().nominalScale();
+print('Band 11 scale:', b11scale);  
+
+// Get a list of all metadata properties.
+var properties = image.propertyNames();
+print('Metadata properties:', properties);  
+
+// Get a specific metadata property.
+var cloudiness = image.get('CLOUD_COVER');
+print('CLOUD_COVER:', cloudiness);  
+
+// Get version number 
+var version = image.get('system:version');
+print('Version:', version); 
+print('Version (as ingestion date):',
+      ee.Date(ee.Number(version).divide(1000)));  
+
+// Get the timestamp and convert it to a date.
+var date_ = ee.Date(image.get('system:time_start'));
+print('Timestamp:', date_); 
+print('--------------------------------------------------');
+
+
+// --------- Running the task list (testing) ----------
+
+

@@ -4,4 +4,8 @@ This repository contains a collection of Javascript code I wrote for use in Goog
 
 1. L9-8Band1Comparison
     - Compares band 1 data from Landsat 8 and 9 imagery since December 2021 to determine issues in Landsat 9 calibration.
-2. 
+2. L9StripeCharacterization
+    - Filters L9 image collections to clear images taken in a 24 hour period 2 days ago over water, and selects the first image.
+      Exports bands 10 and 11 of the image as well as the percent difference between the two, revealing stripe artifacts as a result 
+      of faulty sensor calibration
+3. 

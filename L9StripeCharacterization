@@ -1725,7 +1725,7 @@ print('Two days ago: ', two_days_ago);
 print('Three days ago: ', three_days_ago);
 
 // change for specific date: 
-//var filtered = imageCollection.filterDate('2022-6-9', '2022-6-25');
+//var filtered = imageCollection.filterDate('2022-7-8', '2022-6-25');
 var filtered = imageCollection.filterDate(three_days_ago, two_days_ago);
 print('Filtered by date...', filtered.size());
 

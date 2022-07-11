@@ -393,6 +393,8 @@ var dataTable = [
 
 var chart = ui.Chart(dataTable).setChartType('Table');
 print(chart);
+chart.setDownloadable('CSV');
+print('Chart is downloadable as: ', chart.getDownloadable());
 }
 
 /*

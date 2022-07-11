@@ -14,4 +14,4 @@ This repository contains a collection of Javascript code I wrote for use in Goog
     - Gathers L9 L2 B10 surface temperature estimates at buoy locations in Sandy Pond, NY to compare to on-site surface temperature data for 
       the purpose of determining how accurate the satellite data is 
 
-NOTE:   Each code has a list of imports underneath the comment "IMPORTS". If you import those it should clean up the code and go into the top of the script, especially do this for "L9StripeCharacterization"
+NOTE:   Each code has a list of imports underneath the comment "IMPORTS". If you hover over those and "convert" them it should minimize them and clean up the code, especially do this for "L9StripeCharacterization".

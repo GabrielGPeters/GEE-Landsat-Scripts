@@ -173,3 +173,71 @@ print(ui.Chart.image
           })
   
 );
+/*
+     ------ making list of values to fill in datatable -------
+*/
+
+// Landsat 9 Band 1
+var L9B1PreList = ee.List.sequence(0, Landsat_9.size().subtract(1));
+
+var funcL9B1 = function(number) {
+  var index = L9B1PreList.get(number);
+  return ee.Number(number).subtract(number)
+         .add(
+           ee.Number(ee.Image(L9CollectionList.get(index))
+    .select("B1")
+    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .get("B1"))
+           );
+};
+var L9B1List = ee.List(L9B1PreList.map(funcL9B1));
+print('L9B1', L9B1List);
+
+// Landsat 9 Band 2
+var L9B2PreList = ee.List.sequence(0, Landsat_9.size().subtract(1));
+
+var funcL9B2 = function(number) {
+  var index = L9B2PreList.get(number);
+  return ee.Number(number).subtract(number)
+         .add(
+           ee.Number(ee.Image(L9CollectionList.get(index))
+    .select("B2")
+    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .get("B2"))
+           );
+};
+var L9B2List = ee.List(L9B2PreList.map(funcL9B2));
+print('L9B2', L9B2List);
+
+// Landsat 8 Band 1
+var L8B1PreList = ee.List.sequence(0, Landsat_8.size().subtract(1));
+
+var funcL8B1 = function(number) {
+  var index = L8B1PreList.get(number);
+  return ee.Number(number).subtract(number)
+         .add(
+           ee.Number(ee.Image(L8CollectionList.get(index))
+    .select("B1")
+    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .get("B1"))
+           );
+};
+var L8B1List = ee.List(L8B1PreList.map(funcL8B1));
+print('L8B1', L8B1List);
+
+// Landsat 8 Band 2
+var L8B2PreList = ee.List.sequence(0, Landsat_8.size().subtract(1));
+
+var funcL8B2 = function(number) {
+  var index = L8B2PreList.get(number);
+  return ee.Number(number).subtract(number)
+         .add(
+           ee.Number(ee.Image(L8CollectionList.get(index))
+    .select("B2")
+    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .get("B2"))
+           );
+};
+var L8B2List = ee.List(L8B2PreList.map(funcL8B2));
+print('L8B2', L8B2List);
+

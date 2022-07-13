@@ -177,7 +177,16 @@ print(ui.Chart.image
      ------ making list of values to fill in datatable -------
 */
 
-// Landsat 9 Band 1
+////// Landsat 9 Dates //////
+var datesFunc1 = Landsat_9.map(function(image) {
+  return image.set('date', image.date());
+});
+
+// Get a list of the dates.
+var L9ListDates = datesFunc1.aggregate_array('date');
+print('L9ListDates', L9ListDates);
+
+///// Landsat 9 Band 1 /////
 var L9B1PreList = ee.List.sequence(0, Landsat_9.size().subtract(1));
 
 var funcL9B1 = function(number) {
@@ -193,7 +202,7 @@ var funcL9B1 = function(number) {
 var L9B1List = ee.List(L9B1PreList.map(funcL9B1));
 print('L9B1', L9B1List);
 
-// Landsat 9 Band 2
+///// Landsat 9 Band 2 /////
 var L9B2PreList = ee.List.sequence(0, Landsat_9.size().subtract(1));
 
 var funcL9B2 = function(number) {
@@ -209,7 +218,16 @@ var funcL9B2 = function(number) {
 var L9B2List = ee.List(L9B2PreList.map(funcL9B2));
 print('L9B2', L9B2List);
 
-// Landsat 8 Band 1
+///// Landsat 8 Dates /////
+var datesFunc2 = Landsat_8.map(function(image) {
+  return image.set('date', image.date());
+});
+
+// Get a list of the dates.
+var L8ListDates = datesFunc2.aggregate_array('date');
+print('L8ListDates', L8ListDates);
+
+///// Landsat 8 Band 1 /////
 var L8B1PreList = ee.List.sequence(0, Landsat_8.size().subtract(1));
 
 var funcL8B1 = function(number) {
@@ -224,8 +242,8 @@ var funcL8B1 = function(number) {
 };
 var L8B1List = ee.List(L8B1PreList.map(funcL8B1));
 print('L8B1', L8B1List);
-
-// Landsat 8 Band 2
+ 
+///// Landsat 8 Band 2 /////
 var L8B2PreList = ee.List.sequence(0, Landsat_8.size().subtract(1));
 
 var funcL8B2 = function(number) {
@@ -240,4 +258,49 @@ var funcL8B2 = function(number) {
 };
 var L8B2List = ee.List(L8B2PreList.map(funcL8B2));
 print('L8B2', L8B2List);
+
+
+/*
+     ----------------- Making Downloadable (Testing) ------------------
+*/
+/*
+var L9Size = ee.Number(L9B1List.size().getInfo());
+var L8Size = ee.Number(L8B1List.size().getInfo());
+
+if (L9Size >= L8Size) { 
+  var ListSize = L9Size;
+} else if (L9Size > L8Size) {
+  var ListSize = L8Size;
+}
+
+var dataTable = {
+  cols: [{id: 'L9B1', label: 'L9B1', type: 'number'},
+         {id: 'L9B2', label: 'L9B2', type: 'number'},
+         ],
+  rows: [
+         {c: [{v: L9B1List.get(0).getInfo()}, {v: L8B1List.get(0).getInfo()}]},
+         {c: [{v: L9B1List.get(1).getInfo()}, {v: L8B1List.get(1).getInfo()}]},
+         {c: [{v: L9B1List.get(2).getInfo()}, {v: L8B1List.get(2).getInfo()}]},
+         {c: [{v: L9B1List.get(3).getInfo()}, {v: L8B1List.get(3).getInfo()}]},
+         {c: [{v: L9B1List.get(4).getInfo()}, {v: L8B1List.get(4).getInfo()}]},
+         {c: [{v: L9B1List.get(5).getInfo()}, {v: L8B1List.get(5).getInfo()}]},
+         {c: [{v: L9B1List.get(6).getInfo()}, {v: L8B1List.get(6).getInfo()}]},
+         {c: [{v: L9B1List.get(7).getInfo()}, {v: L8B1List.get(7).getInfo()}]},
+         {c: [{v: L9B1List.get(8).getInfo()}, {v: L8B1List.get(8).getInfo()}]},
+         {c: [{v: L9B1List.get(9).getInfo()}, {v: L8B1List.get(9).getInfo()}]},
+         {c: [{v: L9B1List.get(10).getInfo()}, {v: L8B1List.get(10).getInfo()}]},
+         {c: [{v: 'NA'}, {v: L8B1List.get(11).getInfo()}]},
+         {c: [{v: 'NA'}, {v: L8B1List.get(12).getInfo()}]},
+
+        ]
+};
+
+
+
+var chart = ui.Chart(dataTable).setChartType('Table');
+print(chart);
+chart.setDownloadable('CSV');
+print('Chart is downloadable as: ', chart.getDownloadable());
+
+*/
 

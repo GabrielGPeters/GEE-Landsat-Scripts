@@ -1,7 +1,7 @@
 /**
  * 
  * Author:          Gabriel Peters, ugrad (ggp2366@rit.edu)
- * Latest Version:  6th July 2022
+ * Latest Version:  0.1.3
  * Affiliation:     CIS, Rochester Institute of Technology
  *
  */
@@ -177,7 +177,7 @@ print(ui.Chart.image
      ------ making list of values to fill in datatable -------
 */
 
-////// Landsat 9 Dates //////
+// Landsat 9 Dates
 var datesFunc1 = Landsat_9.map(function(image) {
   return image.set('date', image.date());
 });
@@ -186,7 +186,7 @@ var datesFunc1 = Landsat_9.map(function(image) {
 var L9ListDates = datesFunc1.aggregate_array('date');
 print('L9ListDates', L9ListDates);
 
-///// Landsat 9 Band 1 /////
+// Landsat 9 Band 1
 var L9B1PreList = ee.List.sequence(0, Landsat_9.size().subtract(1));
 
 var funcL9B1 = function(number) {
@@ -195,14 +195,18 @@ var funcL9B1 = function(number) {
          .add(
            ee.Number(ee.Image(L9CollectionList.get(index))
     .select("B1")
-    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .reduceRegion({
+          reducer: ee.Reducer.mean().unweighted(),
+          geometry: area,
+          maxPixels: 1e15
+          })
     .get("B1"))
            );
 };
 var L9B1List = ee.List(L9B1PreList.map(funcL9B1));
 print('L9B1', L9B1List);
 
-///// Landsat 9 Band 2 /////
+// Landsat 9 Band 2
 var L9B2PreList = ee.List.sequence(0, Landsat_9.size().subtract(1));
 
 var funcL9B2 = function(number) {
@@ -211,14 +215,18 @@ var funcL9B2 = function(number) {
          .add(
            ee.Number(ee.Image(L9CollectionList.get(index))
     .select("B2")
-    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .reduceRegion({
+          reducer: ee.Reducer.mean().unweighted(),
+          geometry: area,
+          maxPixels: 1e15
+          })
     .get("B2"))
            );
 };
 var L9B2List = ee.List(L9B2PreList.map(funcL9B2));
 print('L9B2', L9B2List);
 
-///// Landsat 8 Dates /////
+// Landsat 8 Dates
 var datesFunc2 = Landsat_8.map(function(image) {
   return image.set('date', image.date());
 });
@@ -227,7 +235,7 @@ var datesFunc2 = Landsat_8.map(function(image) {
 var L8ListDates = datesFunc2.aggregate_array('date');
 print('L8ListDates', L8ListDates);
 
-///// Landsat 8 Band 1 /////
+// Landsat 8 Band 1
 var L8B1PreList = ee.List.sequence(0, Landsat_8.size().subtract(1));
 
 var funcL8B1 = function(number) {
@@ -236,14 +244,18 @@ var funcL8B1 = function(number) {
          .add(
            ee.Number(ee.Image(L8CollectionList.get(index))
     .select("B1")
-    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .reduceRegion({
+          reducer: ee.Reducer.mean().unweighted(),
+          geometry: area,
+          maxPixels: 1e15
+          })
     .get("B1"))
            );
 };
 var L8B1List = ee.List(L8B1PreList.map(funcL8B1));
 print('L8B1', L8B1List);
- 
-///// Landsat 8 Band 2 /////
+
+// Landsat 8 Band 2
 var L8B2PreList = ee.List.sequence(0, Landsat_8.size().subtract(1));
 
 var funcL8B2 = function(number) {
@@ -252,7 +264,11 @@ var funcL8B2 = function(number) {
          .add(
            ee.Number(ee.Image(L8CollectionList.get(index))
     .select("B2")
-    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .reduceRegion({
+          reducer: ee.Reducer.mean().unweighted(),
+          geometry: area,
+          maxPixels: 1e15
+          })
     .get("B2"))
            );
 };

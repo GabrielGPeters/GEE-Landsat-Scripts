@@ -71,7 +71,11 @@ var func = function(number) {
          .add(
            ee.Number(ee.Image(L9CollectionList.get(index))
     .select("B1")
-    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .reduceRegion({
+          reducer: ee.Reducer.mean().unweighted(),
+          geometry: area,
+          maxPixels: 1e15
+          })
     .get("B1"))
            );
 };
@@ -98,7 +102,11 @@ var func = function(number) {
          .add(
            ee.Number(ee.Image(L8CollectionList.get(index))
     .select("B1")
-    .reduceRegion(ee.Reducer.mean().unweighted(),area)
+    .reduceRegion({
+          reducer: ee.Reducer.mean().unweighted(),
+          geometry: area,
+          maxPixels: 1e15
+          })
     .get("B1"))
            );
 };

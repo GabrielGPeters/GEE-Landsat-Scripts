@@ -132,8 +132,8 @@ var makeRow = function(color, name) {
 var palette =['FF0000', '22ff00', '1500ff', 'FFFF00', '000000'];
  
 // name of the legend
-var names = ['Point1 - Dock','Point2 - Wigwam','Point3 - Seber',
-             'Point4 - South Carl','Point5 - North Carl'];
+var names = ['Point1 - #1148','Point2 - #5977','Point3 - #5967',
+             'Point4 - #3512','Point5 - #3515'];
  
 // Add color and and names
 for (var i = 0; i < 5; i++) {

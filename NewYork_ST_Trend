@@ -1,0 +1,87 @@
+/**
+ * 
+ * Author:          Gabriel Peters, ugrad (ggp2366@rit.edu)
+ * Latest Version:  0.1.2, 2022-7-18
+ * Affiliation:     CIS, Rochester Institute of Technology
+ *
+ * Purpose:         Gathers and plots ST_B10 data from Landsat 8 L2 data
+ *                  from 2013 to present over the state of New York.
+ * 
+ */
+ 
+ //IMPORTS
+ var Landsat8 = ee.ImageCollection("LANDSAT/LC08/C02/T1_L2"),
+    Landsat7 = ee.ImageCollection("LANDSAT/LE07/C02/T2_L2");
+ 
+/*
+     ----------------- Collecting Data ------------------
+*/
+ // load US states dataset and isolating New York
+var stateData = ee.FeatureCollection('TIGER/2018/States');
+var NewYork = stateData.filter(ee.Filter.eq('NAME', 'New York'));
+
+// print new "NewYork" object and explorer features and properties
+print(NewYork);
+
+// add New York outline to the Map as a layer
+Map.centerObject(NewYork, 6);
+Map.addLayer(NewYork);
+
+// filtering the Landsat 8 image collection
+var Landsat_8 = Landsat8
+              .filterDate('2013-1-1', '2022-7-1')
+              .filterMetadata('CLOUD_COVER', 'less_than', 10);
+              
+// print size of collection to console
+print('Landsat8 collection size: ', Landsat_8.size());
+
+// select only the surface temperature band
+var STB10 = Landsat_8.select('ST_B10');
+
+// scale to Kelvin then Fahrenheit, set image acquisition time
+var STB10_F = STB10.map(function(img) {
+  return img
+    .multiply(0.00341802)
+    .add(149.0)
+    .subtract(273)
+    .multiply(1.8)
+    .add(32)
+    .copyProperties(img, ['system:time_start']);
+});
+
+/*
+     ----------------- Making a Chart ------------------
+*/
+
+// chart time series of surface temperature
+var ts1 = ui.Chart.image.series({
+  imageCollection: STB10_F,
+  region: NewYork,
+  reducer: ee.Reducer.mean(),
+  scale: 200,
+  xProperty: 'system:time_start'
+  })
+  .setOptions({
+     title: 'STB10_F New York Time Series (2013-2021)',
+     vAxis: {title: 'ST Fahrenheit'},
+     lineWidth: 1.5,
+     colors: ['red'],
+  });
+print(ts1);
+
+// calculate mean surface temperature for New York in date range
+var clippedSTB10_F = STB10_F.mean().clip(NewYork);
+
+/*
+     ----------------- Adding Map Layers ------------------
+*/
+
+// add clipped image layer to the map.
+Map.addLayer(clippedSTB10_F, {
+  min: 50, max: 80,
+  palette: ['black', 'blue', 'limegreen', 'yellow', 'orange', 'red', 'darkred', 'white']},
+  'Mean temperature (2013-2021');
+
+
+
+

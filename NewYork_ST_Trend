@@ -1,7 +1,7 @@
 /**
  * 
  * Author:          Gabriel Peters, ugrad (ggp2366@rit.edu)
- * Latest Version:  0.1.4, 2022-7-19
+ * Latest Version:  0.1.5, 2022-7-19
  * Affiliation:     CIS, Rochester Institute of Technology
  *
  * Purpose:         Gathers and plots ST_B10 data from Landsat 8 L2 data
@@ -75,6 +75,15 @@ var ts1 = ui.Chart.image.series({
      vAxis: {title: 'ST Kelvin'},
      lineWidth: 1.5,
      colors: ['red'],
+     trendlines: {
+            0: {  // add a trend line to the 1st series
+              type: 'linear',  // or 'polynomial', 'exponential'
+              color: 'black',
+              pointSize: 0,
+              lineWidth: 2,
+              opacity: 1,
+              visibleInLegend: false,
+              }}
   });
 print(ts1);
 

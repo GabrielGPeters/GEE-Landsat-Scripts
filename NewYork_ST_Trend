@@ -1,11 +1,14 @@
 /**
  * 
  * Author:          Gabriel Peters, ugrad (ggp2366@rit.edu)
- * Latest Version:  0.1.5, 2022-7-19
+ * Latest Version:  0.1.6, 2022-7-20
  * Affiliation:     CIS, Rochester Institute of Technology
  *
  * Purpose:         Gathers and plots ST_B10 data from Landsat 8 L2 data
  *                  from 2013 to present over the state of New York.
+ *
+ * Notes: for use on other states "scale" for the chart, "max" and "min" for the maplayer, and the actual name of the state will have to be changed
+ *
  * 
  */
  

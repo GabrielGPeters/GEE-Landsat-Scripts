@@ -1,7 +1,7 @@
 /**
  * 
  * Author:          Gabriel Peters, ugrad (ggp2366@rit.edu)
- * Latest Version:  0.1.6, 2022-7-20
+ * Latest Version:  0.1.7 (Updated: 8-5-22)
  * Affiliation:     CIS, Rochester Institute of Technology
  *
  * Purpose:         Gathers and plots ST_B10 data from Landsat 8 L2 data
@@ -16,9 +16,7 @@
  var Landsat8 = ee.ImageCollection("LANDSAT/LC08/C02/T1_L2"),
     Landsat7 = ee.ImageCollection("LANDSAT/LE07/C02/T2_L2");
  
-/*
-     ----------------- Collecting Data ------------------
-*/
+//    ----------------- Collecting Data ------------------
 
  // load US states dataset and isolating New York
 var stateData = ee.FeatureCollection('TIGER/2018/States');
@@ -61,9 +59,7 @@ var STB10_K = STB10.map(function(img) {
     .copyProperties(img, ['system:time_start']);
 });
 
-/*
-     ----------------- Making a Chart ------------------
-*/
+//    ----------------- Making a Chart ------------------
 
 // chart time series of surface temperature
 var ts1 = ui.Chart.image.series({
@@ -93,9 +89,7 @@ print(ts1);
 // calculate mean surface temperature for New York in date range
 var clippedSTB10 = STB10_K.mean().clip(NewYork);
 
-/*
-     ----------------- Adding Map Layers ------------------
-*/
+//     ----------------- Adding Map Layers ------------------
 
 ///// Main //////
 // add clipped image layer to the map.
@@ -104,10 +98,8 @@ Map.addLayer(clippedSTB10, {
   palette: ['darkblue', 'blue', 'limegreen', 'yellow', 'orange', 'red', 'darkred', 'black']},
   'Mean temperature (2013-2021)');
 
-/*
-     --------------- Making a Legend ---------------
-*/
-{
+// --------------- Making a Legend ---------------
+
 // set position of panel
 var legend = ui.Panel({
   style: {
@@ -171,11 +163,8 @@ for (var i = 0; i < 2; i++) {
  
 // add legend to map (alternatively you can also print the legend to the console)
 Map.add(legend);
-}
 
-/*
-     --------------- Exporting ---------------
-*/
+//     --------------- Exporting ---------------
 
 // Load Landsat image collection.
 var allImages = Landsat_8.filterMetadata('CLOUD_COVER', 'less_than', 0.01)

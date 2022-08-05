@@ -1,7 +1,7 @@
 /**
  * 
  * Author:          Gabriel Peters, ugrad (ggp2366@rit.edu)
- * Latest Version:  0.1.3
+ * Latest Version:  0.1.4 (Updated: 8-5-22)
  * Affiliation:     CIS, Rochester Institute of Technology
  *
  */

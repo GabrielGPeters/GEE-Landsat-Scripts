@@ -54,9 +54,7 @@ Map.addLayer(
 
 Map.centerObject(area, 5);
 
-/*
-     ----------------- Landsat 9 ------------------
-*/
+//     ----------------- Landsat 9 ------------------
 
 // converting the collection to a list 
 var L9CollectionList = Landsat_9.toList(Landsat_9.size());
@@ -85,9 +83,7 @@ var func = function(number) {
 var Landsat9Values = ee.Array(Landsat9List.map(func));
 //print('Landsat9Values: ', Landsat9Values);
 
-/*
-     ----------------- Landsat 8 ------------------
-*/
+//     ----------------- Landsat 8 ------------------
 
 // converting the collection to a list
 var L8CollectionList = Landsat_8.toList(Landsat_8.size());
@@ -116,9 +112,7 @@ var func = function(number) {
 var Landsat8Values = ee.Array(Landsat8List.map(func));
 // print('Landsat8Values: ', Landsat8Values);
 
-/*
-     ----------------- Plotting ------------------
-*/
+//     ----------------- Plotting ------------------
 
 // isolating band 1
 var L9B1 = Landsat_9.select('B1');
@@ -181,9 +175,8 @@ print(ui.Chart.image
           })
   
 );
-/*
-     ------ making list of values to fill in datatable -------
-*/
+
+//     ------ making list of values to fill in datatable -------
 
 // Landsat 9 Dates
 var datesFunc1 = Landsat_9.map(function(image) {
@@ -283,10 +276,8 @@ var funcL8B2 = function(number) {
 var L8B2List = ee.List(L8B2PreList.map(funcL8B2));
 print('L8B2', L8B2List);
 
+//     ----------------- Making Downloadable (Testing) ------------------
 
-/*
-     ----------------- Making Downloadable (Testing) ------------------
-*/
 /*
 var L9Size = ee.Number(L9B1List.size().getInfo());
 var L8Size = ee.Number(L8B1List.size().getInfo());

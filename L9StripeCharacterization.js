@@ -1,7 +1,7 @@
 /**
  * 
  * Author:          Gabriel Peters, ugrad (ggp2366@rit.edu)
- * Latest Version:  0.2.3 2022-7-20
+ * Latest Version:  0.2.4 (Updated: 8-5-22)
  * Affiliation:     CIS, Rochester Institute of Technology
  *
  */
@@ -1897,8 +1897,5 @@ print('Version (as ingestion date):',
 var date_ = ee.Date(image.get('system:time_start'));
 print('Timestamp:', date_); 
 print('--------------------------------------------------');
-
-
-// --------- Running the task list (testing) ----------
 
 

@@ -1,15 +1,13 @@
 /**
  * 
  * Author:         Gabriel Peters, ugrad (ggp2366@rit.edu)
- * Latest Version: 0.1.3
+ * Latest Version:  0.1.3 (Updated: 8-5-22) 
  * Affiliation:    CIS, Rochester Institute of Technology
  *
  */
  
-/*
-     ------------------- READ ME ------------------
-*/
-{
+//     ------------------- READ ME ------------------
+
 /**
  *  Important info: 
  *  1. This code is designed to provide estimated surface temperature data
@@ -22,7 +20,6 @@
  *  
  *
  */
-}
 
 // Verbose settings:
 
@@ -30,10 +27,8 @@ var Verbose = false;
 
 var Console = false;
 
-/*
-     ----------- Defining TidbiT Geometry ----------
-*/
-{
+//     ----------- Defining TidbiT Geometry ----------
+
 // Define a Point object.
 var point1 = ee.Geometry.Point(-76.1646402, 43.6596454); // #1148
 var point2 = ee.Geometry.Point(-76.1776992, 43.6428234); // #5977
@@ -75,12 +70,9 @@ Map.addLayer(point5,
 
 
 Map.centerObject(point4, 13);
-}
 
-/*
-     --------------- Making a Legend ---------------
-*/
-{
+//     --------------- Making a Legend ---------------
+
 // set position of panel
 var legend = ui.Panel({
   style: {
@@ -142,12 +134,10 @@ for (var i = 0; i < 5; i++) {
  
 // add legend to map (alternatively you can also print the legend to the console)
 Map.add(legend);
-}
 
-/*
-     ------------ Filtering Collection -------------
-*/
-{
+
+//     ------------ Filtering Collection -------------
+
 //Imports
 var Landsat9_C2_T1_L2 = ee.ImageCollection("LANDSAT/LC09/C02/T1_L2");
 
@@ -192,12 +182,9 @@ if (Verbose === true){
       'ST_B10'
     );
 }
-}
 
-/*
-   ------------ Extracting Pixel Values ------------
-*/
-{
+//   ------------ Extracting Pixel Values ------------
+
 // extract the pixel value for point1
 var data = image
 .select("ST_B10")
@@ -356,12 +343,9 @@ var surfTempF5 = (surfTemp5.subtract(273)).multiply(1.8).add(32);
 if (Console === true){
   print('Pixel Value (Fahrenheit): ', surfTempF5);
 }
-}
 
-/*
-   -------------- Making a Data Table --------------
-*/
-{
+//   -------------- Making a Data Table --------------
+
 // type conversion for table
 var value1 = dataN.getInfo();
 var value2 = dataN2.getInfo();
@@ -395,13 +379,11 @@ var chart = ui.Chart(dataTable).setChartType('Table');
 print(chart);
 chart.setDownloadable('CSV');
 print('Chart is downloadable as: ', chart.getDownloadable());
-}
+
+//   ------------------- Exporting -------------------
 
 /*
-   ------------------- Exporting -------------------
-*/
-{
-/*var date = (ee.Date(image.get('system:time_start')).format('YYYY-MM-dd')).getInfo();  
+var date = (ee.Date(image.get('system:time_start')).format('YYYY-MM-dd')).getInfo();  
 var image_id = (image.getString('LANDSAT_PRODUCT_ID')).getInfo();
 var imageIndexId = (image.getString('system:index')).getInfo();
 print('Name of export: ' + '"' + image_id  +  '"');
@@ -416,5 +398,6 @@ Export.image.toDrive({
   fileNamePrefix: 'B10 Surface Temp',     // name of file will be the date the image was taken
   scale: 50,
   maxPixels: 10000000000000
-  });*/
-}
+  });
+  */
+

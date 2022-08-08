@@ -33,7 +33,7 @@ var Console = false;
 var point1 = ee.Geometry.Point(-76.1646402, 43.6596454); // #1148
 var point2 = ee.Geometry.Point(-76.1776992, 43.6428234); // #5977
 var point3 = ee.Geometry.Point(-76.1669502, 43.6500498); // #5967
-var point4 = ee.Geometry.Point(-76.1839152, 43.6623287); // #3512
+var point4 = ee.Geometry.Point(-76.1839152, 43.6623287); // #3513
 var point5 = ee.Geometry.Point(-76.1880032, 43.6675437); // #3515
 
 // Print the result to the console.
@@ -371,7 +371,7 @@ var dataTable = [
   ['#1148', '(-76.1646402, 43.6596454)', value1, SurfTemp1, SurfTempF1, date + ' ' + time],
   ['#5977', '(-76.1776992, 43.6428234)', value2, SurfTemp2, SurfTempF2, date + ' ' + time],
   ['#5967', '(-76.1669502, 43.6500498)', value3, SurfTemp3, SurfTempF3, date + ' ' + time],
-  ['#3512', '(-76.1839152, 43.6623287)', value4, SurfTemp4, SurfTempF4, date + ' ' + time],
+  ['#3513', '(-76.1839152, 43.6623287)', value4, SurfTemp4, SurfTempF4, date + ' ' + time],
   ['#3515', '(-76.1880032, 43.6675437)', value5, SurfTemp5, SurfTempF5, date + ' ' + time],
 ];
 

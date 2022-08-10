@@ -1,14 +1,14 @@
 /**
  * 
  * Author:         Gabriel Peters, ugrad (ggp2366@rit.edu)
- * Latest Version:  0.1.3 (Updated: 8-5-22) 
+ * Latest Version:  0.2.0 (Updated: 8-10-22) 
  * Affiliation:    CIS, Rochester Institute of Technology
  *
  */
  
 //     ------------------- READ ME ------------------
 
-/**
+/*
  *  Important info: 
  *  1. This code is designed to provide estimated surface temperature data
  *     from Landsat 9 Level 2 data, for a specific set of manually selected 
@@ -124,8 +124,8 @@ var makeRow = function(color, name) {
 var palette =['FF0000', '22ff00', '1500ff', 'FFFF00', '000000'];
  
 // name of the legend
-var names = ['Point1 - #1148','Point2 - #5977','Point3 - #5967',
-             'Point4 - #3512','Point5 - #3515'];
+var names = ['#1148 Depth: 1in','#5977 Depth: 16in','#5967 Depth: 16in',
+             '#3513 Depth: 19in','#3515 Depth: 13in'];
  
 // Add color and and names
 for (var i = 0; i < 5; i++) {
@@ -147,8 +147,8 @@ print('Images found...', Landsat9_C2_T1_L2.size());
 print('--------------------------------------------------');
 
 var imageCollection = ee.ImageCollection("LANDSAT/LC09/C02/T1_L2")
-              .filterDate('2022-6-9', '2022-6-23')
-              .filterMetadata('CLOUD_COVER', 'less_than', 50)
+              .filterDate('2022-6-28', '2022-7-10')
+              .filterMetadata('CLOUD_COVER', 'less_than', 20)
               .filterBounds(point1);
 
 print('Filtered Over Region: ', imageCollection.size());
@@ -213,11 +213,11 @@ if (Console === true){
   print('Pixel Value (Kelvin): ', surfTemp);
 }
 
-// pixel value in Fahrenheit
-var surfTempF = (surfTemp.subtract(273)).multiply(1.8).add(32);
+// pixel value in Celcius
+var surfTempF = surfTemp.subtract(273);
 
 if (Console === true){
-  print('Pixel Value (Fahrenheit): ', surfTempF);
+  print('Pixel Value (Celcius): ', surfTempF);
 
   print('--------------------------------------------------');
   print('Point2 (Wigwam): ');
@@ -244,11 +244,11 @@ if (Console === true){
   print('Pixel Value (Kelvin): ', surfTemp2);
 } 
 
-// pixel value in Fahrenheit
-var surfTempF2 = (surfTemp2.subtract(273)).multiply(1.8).add(32);
+// pixel value in Celcius
+var surfTempF2 = surfTemp2.subtract(273);
 
 if (Console === true){
-  print('Pixel Value (Fahrenheit): ', surfTempF2);
+  print('Pixel Value (Celcius): ', surfTempF2);
 
   print('--------------------------------------------------');
   print('Point3 (Seber): ');
@@ -275,11 +275,11 @@ if (Console === true){
   print('Pixel Value (Kelvin): ', surfTemp3);
 }
 
-// pixel value in Fahrenheit
-var surfTempF3 = (surfTemp3.subtract(273)).multiply(1.8).add(32);
+// pixel value in Celcius
+var surfTempF3 = surfTemp3.subtract(273);
 
 if (Console === true){
-  print('Pixel Value (Fahrenheit): ', surfTempF3);
+  print('Pixel Value (Celcius): ', surfTempF3);
 
   print('--------------------------------------------------');
   print('Point4 (South Carl): ');
@@ -306,11 +306,11 @@ if (Console === true){
   print('Pixel Value (Kelvin): ', surfTemp4);
 }
 
-// pixel value in Fahrenheit
-var surfTempF4 = (surfTemp4.subtract(273)).multiply(1.8).add(32);
+// pixel value in Celcius
+var surfTempF4 = surfTemp4.subtract(273);
 
 if (Console === true){
-  print('Pixel Value (Fahrenheit): ', surfTempF4);
+  print('Pixel Value (Celcius): ', surfTempF4);
 
   print('--------------------------------------------------');
   print('Point5 (North Carl): ');
@@ -337,11 +337,11 @@ if (Console === true){
   print('Pixel Value (Kelvin): ', surfTemp5);
 }
 
-// pixel value in Fahrenheit
-var surfTempF5 = (surfTemp5.subtract(273)).multiply(1.8).add(32);
+// pixel value in Celcius
+var surfTempF5 = surfTemp5.subtract(273);
 
 if (Console === true){
-  print('Pixel Value (Fahrenheit): ', surfTempF5);
+  print('Pixel Value (Celcius): ', surfTempF5);
 }
 
 //   -------------- Making a Data Table --------------
@@ -367,7 +367,7 @@ var time = (ee.Date(image.get('system:time_start')).format('H:m:s')).getInfo();
 print('Data Table:');
 
 var dataTable = [
-  ['TidbiT', 'Location (Sandy Pond)', 'Pixel Value', 'Kelvin (K)', 'Fahrenheit (F)', '(year-month-day hour:minute:second)'],
+  ['TidbiT', 'Location (Sandy Pond)', 'Pixel Value', 'Kelvin (K)', 'Celcius (C)', '(year-month-day hour:minute:second)'],
   ['#1148', '(-76.1646402, 43.6596454)', value1, SurfTemp1, SurfTempF1, date + ' ' + time],
   ['#5977', '(-76.1776992, 43.6428234)', value2, SurfTemp2, SurfTempF2, date + ' ' + time],
   ['#5967', '(-76.1669502, 43.6500498)', value3, SurfTemp3, SurfTempF3, date + ' ' + time],

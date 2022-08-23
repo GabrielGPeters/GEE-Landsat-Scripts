@@ -1896,6 +1896,3 @@ print('Version (as ingestion date):',
 // Get the timestamp and convert it to a date.
 var date_ = ee.Date(image.get('system:time_start'));
 print('Timestamp:', date_); 
-print('--------------------------------------------------');
-
-
